@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sudharshan's Astro Engine</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<main class="wrap">
+<header>
+ <p class="eyebrow">PROJECT 3 · TWO MARAGAMS ANALYSIS</p>
+ <h1>Sudharshan's Astro Engine</h1>
+ <p class="sub">Enter the horoscope's actual Lagnam and each planet's occupied house.</p>
+</header>
+<form method="post" class="panel">
+ <label class="main-label" for="lagnam">1. Actual Lagnam</label>
+ <select id="lagnam" name="lagnam">
+ {% for item in lagnams %}<option value="{{ item }}" {% if item == lagnam %}selected{% endif %}>{{ item }}</option>{% endfor %}
+ </select>
+ <h2>2. Planetary positions</h2>
+ <p class="hint">Enter the house number (1–12) for each planet, counted from the selected Lagnam. Leave unknown planets blank.</p>
+ <div class="planet-grid">
+ {% for planet in planets %}
+ <label class="planet-field"><span>{{ planet }}</span>
+ <select name="{{ planet }}"><option value="">Not entered</option>
+ {% for n in range(1,13) %}<option value="{{ n }}" {% if positions[planet] == n|string %}selected{% endif %}>House {{ n }}</option>{% endfor %}
+ </select></label>
+ {% endfor %}
+ </div>
+ <div class="period-select">
+ <label class="main-label" for="active_dhesai">3. Current Dhesai</label>
+ <select id="active_dhesai" name="active_dhesai">
+ {% for p in dhesai_order %}<option value="{{ p }}" {% if p == active_dhesai %}selected{% endif %}>{{ p }} Dhesai</option>{% endfor %}
+ </select>
+ <p class="hint">The app checks this Dhesai and the next two planets in your sequence.</p>
+ </div>
+ <button type="submit">Analyse horoscope, Two Maragams and Dhesai</button>
+</form>
+{% if result %}
+ {% if result.error %}<section class="panel error">{{ result.error }}</section>
+ {% else %}
+ <section class="panel">
+  <h2>House and sign mapping</h2>
+  <p class="hint">Lagnam: <strong>{{ result.lagnam }}</strong>. House 1 starts from this Lagnam.</p>
+  <div class="house-grid">
+  {% for house, sign in result.sign_map.items() %}
+   <div class="house"><strong>House {{ house }}</strong><span>{{ sign }}</span>
+   <small>{{ result.house_planets[house]|join(", ") if result.house_planets[house] else "No planet entered" }}</small></div>
+  {% endfor %}
+  </div>
+ </section>
+ <section class="panel strength">
+  <h2>Planetary strength — Aatchi / Ucham / Neecham</h2>
+  {% if result.strengths %}<ul>{% for item in result.strengths %}<li><strong>{{ item.planet }} in {{ item.sign }}:</strong> {{ item.tags|join(" · ") }}</li>{% endfor %}</ul>
+  {% else %}<p>No entered planet currently matches an Aatchi, Ucham or Neecham sign.</p>{% endif %}
+ </section>
+ <section class="panel good">
+  <h2>Good combinations</h2>
+  <h3>Good joins</h3>
+  {% if result.good_joins %}<ul>{% for item in result.good_joins %}<li>{{ item }}</li>{% endfor %}</ul>{% else %}<p>No good conjunction rule matched.</p>{% endif %}
+  <h3>Good mutual aspects</h3>
+  {% if result.good_aspects %}<ul>{% for item in result.good_aspects %}<li>{{ item }}</li>{% endfor %}</ul>{% else %}<p>No programmed good mutual-aspect rule matched.</p>{% endif %}
+ </section>
+ <section class="panel two-maragam">
+  <h2>Two Maragams Issue — All 12 Lagnams</h2>
+  <p class="hint">The engine checks every Lagnam's two Maaragam lords, even when it is not the selected horoscope Lagnam.</p>
+  {% if result.two_maragam_issues %}
+   <ul>{% for item in result.two_maragam_issues %}
+    <li><strong>{{ item.lagnam }} Lagnam:</strong> {{ item.house1_label }} house ({{ item.house1_sign }}) and {{ item.house2_label }} house ({{ item.house2_sign }}) are its two Maaragam houses. Their lords <strong>{{ item.planet1 }} + {{ item.planet2 }}</strong> are {{ item.relation }}. <strong>CHECK THIS DEEPER — Two Maragams risk.</strong></li>
+   {% endfor %}</ul>
+  {% else %}
+   <p><strong>There is no two Maragams in this horoscope.</strong></p>
+  {% endif %}
+ </section>
+ <section class="panel risk">
+  <h2>CHECK THIS DEEPER — Horoscope risks</h2>
+  {% if result.alerts %}<ul>{% for item in result.alerts %}<li>{{ item }}</li>{% endfor %}</ul>{% else %}<p>No programmed horoscope risk rule matched.</p>{% endif %}
+ </section>
+ <section class="panel period">
+  <h2>Period / Dhesai analysis</h2>
+  <p class="hint">Current Dhesai and the next two planets: <strong>{{ result.period_planets|join(" → ") }}</strong></p>
+  {% for item in result.period_results %}
+   <div class="period-card">
+    <h3>{{ item.planet }} Dhesai</h3>
+    {% if item.missing %}<p>Position not entered, so this planet cannot be checked yet.</p>
+    {% else %}
+     <p>Planet is in sign <strong>{{ item.sign }}</strong>.</p>
+     {% if item.matches %}
+      <ul>{% for match in item.matches %}<li><strong>{{ match.lagnam }}</strong>: House {{ match.house }} — {{ match.reasons|join(" + ") }}. <strong>CHECK THIS DEEPER</strong></li>{% endfor %}</ul>
+     {% else %}<p>No Maaragam or Baathagam house match found across the 12 Lagnams.</p>{% endif %}
+    {% endif %}
+   </div>
+  {% endfor %}
+ </section>
+ <section class="panel notes"><h2>Engine notes</h2><ul>{% for note in result.notes %}<li>{{ note }}</li>{% endfor %}</ul></section>
+ {% endif %}
+{% endif %}
+<footer>Project 3 · Two Maragams Analysis · Ratings are reserved for Project 4</footer>
+</main>
+</body></html>

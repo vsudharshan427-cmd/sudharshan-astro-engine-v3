@@ -1,0 +1,12 @@
+*{box-sizing:border-box}body{margin:0;background:#f2f4f8;color:#182033;font-family:Arial,Helvetica,sans-serif;line-height:1.5}
+.wrap{width:min(1050px,94%);margin:34px auto 60px}header{margin-bottom:22px}.eyebrow{color:#53627b;font-size:12px;font-weight:700;letter-spacing:1.5px}
+h1{margin:6px 0;font-size:clamp(28px,5vw,42px)}.sub,.hint{color:#606b80}.panel{background:#fff;border:1px solid #e1e6ef;border-radius:14px;padding:22px;margin:18px 0;box-shadow:0 5px 18px rgba(20,35,65,.04)}
+h2{font-size:20px;margin:0 0 14px}h3{font-size:16px;margin:14px 0 8px}.main-label{display:block;font-weight:700;margin-bottom:8px}
+select{width:100%;padding:11px 12px;border:1px solid #cbd3e0;border-radius:8px;background:#fff;color:#182033;font-size:15px}#lagnam,#active_dhesai{max-width:390px}
+.planet-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:13px;margin:16px 0 20px}.planet-field span{display:block;font-weight:700;margin-bottom:6px}
+.period-select{margin:22px 0}button{border:0;border-radius:9px;padding:13px 20px;background:#253b70;color:#fff;font-size:16px;font-weight:700;cursor:pointer}button:hover{background:#1b2d58}
+.house-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px}.house{background:#f6f8fc;border:1px solid #e5eaf2;border-radius:9px;padding:12px}.house strong,.house span,.house small{display:block}.house span{font-weight:700;margin:3px 0}.house small{color:#69748a;overflow-wrap:anywhere}
+.good{border-left:5px solid #29966b}.risk{border-left:5px solid #d08a25}.period{border-left:5px solid #5269a7}.strength{border-left:5px solid #8b6bb2}.period-card{padding:12px 14px;background:#f7f8fc;border:1px solid #e5e9f1;border-radius:9px;margin:12px 0}.error{color:#a12d2d}li{margin:7px 0}.notes{background:#fafbfe}footer{text-align:center;color:#788297;font-size:12px;margin-top:28px}
+@media(max-width:560px){.panel{padding:16px}}
+
+.two-maragam{border-left:5px solid #7653a6}.two-maragam li{padding:8px 0;border-bottom:1px solid #eceff5}.two-maragam li:last-child{border-bottom:0}
